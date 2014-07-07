@@ -289,7 +289,7 @@ mmChrome.prototype = {
 		else
 			mem = mem.toFixed(3);
 
-		if (mem > 999)
+		if (mem > 999 && this._fSpacer != '')
 			return this.addFigure(mem);
 		return String(mem);
 	},
