@@ -218,23 +218,23 @@ mmChrome.prototype = {
 		this.interval = setInterval(this.start.bind(this), this._interval);
 	},
 
-	init: function (window) {
+	init: function(window) {
 		this.window = window;
 		let {document, setInterval} = window;
 		window.addEventListener('unload', this, false);
 
-		let memoryLabel = document.createElement('label');
+		let memoryLabel = this.memoryLabel = document.createElement('label');
 		memoryLabel.id = 'memory-monitor-uasad';
 		document.getElementById('urlbar-icons').appendChild(memoryLabel);
 
 		this.start();
 		this.interval = setInterval(this.start.bind(this), this._interval);
 	},
-	uninit: function () {
+	uninit: function() {
 		let {clearInterval} = this.window;
 		clearInterval(this.interval);
 	},
-	destroy: function () {
+	destroy: function() {
 		let {window} = this;
 		let {document} = window;
 		window.removeEventListener('unload', this, false);
@@ -254,12 +254,12 @@ mmChrome.prototype = {
 		}
 	},
 
-	addFigure: function (str) {
+	addFigure: function(str) {
 		let num = new String(str).replace(/,/g, '');
 		return num.replace(/(\d)(?=((\d{3})+)(\D|$))/g, '$1' + this._fSpacer);
 	},
 
-	getSize: function (mem, flag) {
+	getSize: function(mem, flag) {
 		let pre = 1;
 		switch (this._prefix) {
 			case 'KB':
@@ -292,17 +292,17 @@ mmChrome.prototype = {
 		return this.addFigure(mem);
 	},
 
-	setPrefix: function (flag) {
+	setPrefix: function(flag) {
 		return (flag) ? ' ' + this._prefix : '';
 	},
 
-	start: function () {
+	start: function() {
 		let {document, clearInterval} = this.window;
 		try {
 			let mgr = Cc['@mozilla.org/memory-reporter-manager;1'].
 				getService(Ci.nsIMemoryReporterManager);
 			let workingSet = mgr.resident;
-			let memoryLabel = document.getElementById('memory-monitor-uasad');
+			let memoryLabel = this.memoryLabel || document.getElementById('memory-monitor-uasad');
 			//memoryLabel.setAttribute('value', this.getSize(workingSet) + this.setPrefix(this._dPrefix));
 			memoryLabel.value = (this.getSize(workingSet) + this.setPrefix(this._dPrefix));
 		}
