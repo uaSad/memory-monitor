@@ -304,13 +304,10 @@ mmChrome.prototype = {
 
 	start: function() {
 		try {
-			let workingSet = this.mgr.resident;
-			let memoryLabel = this.memoryLabel;
-			memoryLabel.value = this.getSize(workingSet) + this.setPrefix(this._dPrefix);
+			this.memoryLabel.value = this.getSize(this.mgr.resident) + this.setPrefix(this._dPrefix);
 		}
 		catch (ex) {
-			let {clearInterval} = this.window;
-			clearInterval(this.interval);
+			this.window.clearInterval(this.interval);
 		};
 	}
 };
