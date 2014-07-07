@@ -304,7 +304,7 @@ mmChrome.prototype = {
 
 	start: function() {
 		try {
-			this.memoryLabel.value = this.getSize(this.mgr.resident) + this.setPrefix(this._dPrefix);
+			this.memoryLabel.value = this.getSize(this.mgr.residentFast || this.mgr.resident) + this.setPrefix(this._dPrefix);
 		}
 		catch (ex) {
 			this.window.clearInterval(this.interval);
