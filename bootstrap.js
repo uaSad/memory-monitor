@@ -289,7 +289,9 @@ mmChrome.prototype = {
 		else
 			mem = mem.toFixed(3);
 
-		return this.addFigure(mem);
+		if (mem > 999)
+			return this.addFigure(mem);
+		return String(mem);
 	},
 
 	setPrefix: function(flag) {
