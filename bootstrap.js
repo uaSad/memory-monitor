@@ -296,17 +296,20 @@ mmChrome.prototype = {
 		return (flag) ? ' ' + this._prefix : '';
 	},
 
+	get mgr() {
+		delete mmChrome.prototype.mgr;
+		return mmChrome.prototype.mgr = Cc['@mozilla.org/memory-reporter-manager;1'].
+			getService(Ci.nsIMemoryReporterManager);
+	},
+
 	start: function() {
-		let {document, clearInterval} = this.window;
 		try {
-			let mgr = Cc['@mozilla.org/memory-reporter-manager;1'].
-				getService(Ci.nsIMemoryReporterManager);
-			let workingSet = mgr.resident;
-			let memoryLabel = this.memoryLabel || document.getElementById('memory-monitor-uasad');
-			//memoryLabel.setAttribute('value', this.getSize(workingSet) + this.setPrefix(this._dPrefix));
-			memoryLabel.value = (this.getSize(workingSet) + this.setPrefix(this._dPrefix));
+			let workingSet = this.mgr.resident;
+			let memoryLabel = this.memoryLabel;
+			memoryLabel.value = this.getSize(workingSet) + this.setPrefix(this._dPrefix);
 		}
 		catch (ex) {
+			let {clearInterval} = this.window;
 			clearInterval(this.interval);
 		};
 	}
@@ -320,10 +323,6 @@ let prefs = {
 		if (this.initialized)
 			return;
 		this.initialized = true;
-
-		// Using __proto__ or setPrototypeOf to set a prototype is now deprecated.
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=948227
-		this._cache = Object.create(null);
 
 		let curVersion = this.getPref(this.ns + 'prefsVersion', 0);
 		if (curVersion < this.version) {
@@ -379,7 +378,9 @@ let prefs = {
 		Services.scriptloader.loadSubScript(prefsFile, scope);
 	},
 
-	//_cache: { __proto__: null },
+	// Using __proto__ or setPrototypeOf to set a prototype is now deprecated.
+	// https://bugzilla.mozilla.org/show_bug.cgi?id=948227
+	_cache: Object.create(null),
 	get: function(pName, defaultVal) {
 		let cache = this._cache;
 		return pName in cache
