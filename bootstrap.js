@@ -255,7 +255,7 @@ mmChrome.prototype = {
 	},
 
 	addFigure: function(str) {
-		let num = new String(str).replace(/,/g, '');
+		let num = String(str).replace(/\D/g, '');
 		return num.replace(/(\d)(?=((\d{3})+)(\D|$))/g, '$1' + this._fSpacer);
 	},
 
