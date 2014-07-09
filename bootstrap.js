@@ -256,7 +256,7 @@ mmChrome.prototype = {
 
 	addFigure: function(mem) {
 		let num = ('' + mem).replace(/\D/g, '');
-		while (num != (num = num.replace(/^(-?\d+)(\d{3})/, '$1' +  + this._fSpacer + '$2')));
+		while (num != (num = num.replace(/^(-?\d+)(\d{3})/, '$1' + this._fSpacer + '$2')));
 		return num;
 	},
 
